@@ -1,9 +1,12 @@
 package com.api.book.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Author {
@@ -13,17 +16,25 @@ public class Author {
 	private String firstName;
 	private String lastName;
 	private String language;
+	
+	@OneToOne(mappedBy = "author") // Extra Column book_book_id will not be created only author_author_id is enough to mapped both tables
+	@JsonBackReference // to stop control here its in a child table
+	private Book book; // BiDirectional Mapping
+	
 	public Author() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Author(int authorId, String firstName, String lastName, String language) {
+	
+	public Author(int authorId, String firstName, String lastName, String language, Book book) {
 		super();
 		this.authorId = authorId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.language = language;
+		this.book = book;
 	}
+
 	public int getAuthorId() {
 		return authorId;
 	}
@@ -48,13 +59,14 @@ public class Author {
 	public void setLanguage(String language) {
 		this.language = language;
 	}
-	@Override
-	public String toString() {
-		return "Author [authorId=" + authorId + ", firstName=" + firstName + ", lastName=" + lastName + ", language="
-				+ language + "]";
+
+	public Book getBook() {
+		return book;
+	}
+
+	public void setBook(Book book) {
+		this.book = book;
 	}
 
 	
-	
-
 }
